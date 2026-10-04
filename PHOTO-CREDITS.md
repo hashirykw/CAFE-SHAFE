@@ -26,3 +26,10 @@ Credits listed as a courtesy.
 | Oreo / Chocolate Cold Coffee | Victor Rutka · Nutella — Clarissa Carbungco · Strawberry Shake — Sebastian Coman |
 | Chocolate/Salted Caramel | Dreamer Dude · Banana — kimia kazemi |
 | Ice creams | Pranav Kumar Jain, ikhsan baihaqi, Laura Peruchi, Chris Boland |
+
+## Chai bar
+| Chai | Photographer |
+|---|---|
+| Doodh Patti | Salar Arif · Kehwa — Aniketh Kanukurthi · Adrak Kehwa — Manki Kim |
+| Kashmiri (tinted pink) | VD Photography · Green Tea (tinted) — Igor Lifar · Black Tea — CHI CHEN |
+| Elaichi | Amir Shrestha · Malai — Harshit Mahabale · Malai Badami — VD Photography |

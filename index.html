@@ -257,12 +257,19 @@ html.m .rv{opacity:0;transform:translateY(40px)}
 .chai__px{font-family:var(--f-mono);font-size:.86rem;color:var(--mute)}
 .chai__btn[aria-pressed="true"] .chai__px{color:var(--chai-hi)}
 .chai__stage{position:relative;display:grid;justify-items:center;text-align:center}
-.cup{width:min(100%,360px);height:auto;overflow:visible}
+.cup{width:min(100%,360px);height:auto;overflow:visible;display:none}
+.chai__photo{position:relative;width:min(100%,380px);aspect-ratio:4/5;border-radius:var(--r-lg);overflow:hidden;background:var(--ink-2);box-shadow:0 30px 70px -24px var(--glow,transparent),0 0 0 1px oklch(100% 0 0 / .08)}
+.chai__photo .pic{position:absolute;inset:0;filter:saturate(1.1) contrast(1.05) hue-rotate(var(--hue,0deg));transform-origin:50% 60%}
+.chai__photo::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,oklch(13.5% .018 295 / .7),transparent 40%),radial-gradient(90% 60% at 50% 110%,var(--glow,transparent),transparent 70%)}
+.chai__steam{position:absolute;z-index:1;left:50%;top:6%;width:42%;translate:-50% 0;opacity:.7;pointer-events:none}
+.chai__steam path{stroke-width:4}
+.chai__photo.no-ph{display:none}
+.chai__photo.no-ph + .cup{display:block}
 .cup .liq{transition:fill .8s var(--ease)}
 .chai__name{margin-top:var(--s-md);font-size:clamp(2rem,1.4rem + 2vw,3.2rem)}
 .chai__desc{margin-top:8px;color:var(--mute);max-width:36ch}
 .chai__price{margin-top:var(--s-md);display:flex;align-items:center;gap:var(--s-md);font-family:var(--f-display);font-weight:900;font-size:2.4rem;color:var(--chai-hi)}
-@media (max-width:900px){.chai__panel{grid-template-columns:minmax(0,1fr)}.chai__stage{order:-1}.cup{width:min(70vw,260px)}}
+@media (max-width:900px){.chai__panel{grid-template-columns:minmax(0,1fr)}.chai__stage{order:-1}.cup{width:min(70vw,260px)}.chai__photo{width:min(78vw,320px)}}
 
 /* ================= KITCHEN BENTO ================= */
 .kitchen{padding-block:var(--sec)}
@@ -670,6 +677,10 @@ html.m .rv{opacity:0;transform:translateY(40px)}
     <div class="chai__panel glass rv">
       <ul class="chai__list" id="chaiList"></ul>
       <div class="chai__stage">
+        <div class="chai__photo" id="chaiPhoto" data-ph-wrap>
+          <img class="pic" id="chaiImg" alt="" width="900" height="1125">
+          <svg class="chai__steam" viewBox="0 0 120 80" aria-hidden="true"><g class="steam"><path d="M30 70c-10-12 10-20 0-36"/><path d="M60 70c-10-12 10-20 0-36"/><path d="M90 70c-10-12 10-20 0-36"/></g></svg>
+        </div>
         <svg class="cup" viewBox="0 0 300 260" aria-hidden="true">
           <g class="steam" transform="translate(96 10)"><path d="M10 50c-10-12 10-20 0-36"/><path d="M50 50c-10-12 10-20 0-36"/><path d="M90 50c-10-12 10-20 0-36"/></g>
           <ellipse cx="150" cy="238" rx="122" ry="16" fill="none" stroke="#fff" stroke-width="5"/>
@@ -868,7 +879,16 @@ const PH = {
   iceCup: U('1619158401201-8fa932695178'),    // ice cream in a cup
   pinkIce: U('1611928237590-087afc90c6fd'),   // pink ice cream
   cone: U('1663721206074-02fb7b026da8'),      // ice cream cone
-  iceCherry: U('1678712803863-6cd22f6b9dba')  // ice cream with cherry
+  iceCherry: U('1678712803863-6cd22f6b9dba'), // ice cream with cherry
+  // ---- chai bar ----
+  cDoodh: U('1583836632332-53825ce55a03'),    // milky chai in a glass mug
+  cKehwa: U('1567922045116-2a00fae2ed03'),    // amber tea in a small bowl, green leaves
+  cAdrak: U('1558160074-4d7d8bdf4256'),       // glass cup of tea by a teapot
+  cKashmiri: U('1634299406775-90f32b656536'), // milky chai on a saucer (tinted pink)
+  cGreen: U('1573784540576-21ddeff9479b'),    // glass teacup on saucer (tinted green)
+  cBlack: U('1562547256-2c5ee93b60b7'),       // dark tea pouring into a teacup
+  cMalai: U('1633069683078-b180ba2afd89'),    // cup of chai on a wooden table
+  cBadami: U('1630748662359-40a2105640c7')    // chai cup on a blue ceramic plate
 };
 /* one photo per drink (hue shifts keep repeats from looking identical) */
 const DRINK_PH = {
@@ -1001,23 +1021,28 @@ $('#galGrid').innerHTML = GAL.map(g => `<a class="gtile rv ${g.c || ''}" href="#
 
 /* ================= CHAI BAR ================= */
 const CHAI = {
-  'Doodh Patti': ['oklch(62% .11 55)', 'Tea leaves brewed straight in milk — strong and creamy.'],
-  'Kehwa': ['oklch(74% .13 85)', 'Light green tea, the classic after-meal cup.'],
-  'Special Adrak Kehwa': ['oklch(70% .14 75)', 'Kehwa with ginger for extra warmth.'],
-  'Kashmiri Chai': ['oklch(74% .09 0)', 'The pink tea — milky, nutty, slow-brewed.'],
-  'Green Tea': ['oklch(74% .12 125)', 'Plain green tea, nothing added.'],
-  'Elaichi Chai': ['oklch(66% .1 65)', 'Milk tea scented with cardamom.'],
-  'Black Tea': ['oklch(36% .08 40)', 'Straight black tea. The cheapest cup on the board.'],
-  'Malai Chai': ['oklch(78% .07 70)', 'Milk tea finished with a layer of malai.'],
-  'Malai Badami Chai': ['oklch(74% .08 65)', 'Malai chai with almonds.']
+  'Doodh Patti': ['oklch(62% .11 55)', 'Tea leaves brewed straight in milk — strong and creamy.', 'cDoodh'],
+  'Kehwa': ['oklch(74% .13 85)', 'Light green tea, the classic after-meal cup.', 'cKehwa'],
+  'Special Adrak Kehwa': ['oklch(70% .14 75)', 'Kehwa with ginger for extra warmth.', 'cAdrak'],
+  'Kashmiri Chai': ['oklch(74% .09 0)', 'The pink tea — milky, nutty, slow-brewed.', 'cKashmiri', -38],
+  'Green Tea': ['oklch(74% .12 125)', 'Plain green tea, nothing added.', 'cGreen', 40],
+  'Elaichi Chai': ['oklch(66% .1 65)', 'Milk tea scented with cardamom.', 'chaiGlass'],
+  'Black Tea': ['oklch(36% .08 40)', 'Straight black tea. The cheapest cup on the board.', 'cBlack'],
+  'Malai Chai': ['oklch(78% .07 70)', 'Milk tea finished with a layer of malai.', 'cMalai'],
+  'Malai Badami Chai': ['oklch(74% .08 65)', 'Malai chai with almonds.', 'cBadami']
 };
 $('#chaiList').innerHTML = MENU[0].items.map((it, i) => `<li><button class="chai__btn" type="button" aria-pressed="${i === 0}" data-chai="${it.id}" style="--c:${CHAI[it.n][0]}"><span class="chai__dot"></span><span class="chai__nm">${it.n}</span><span class="chai__px">${rs(it.p)}</span></button></li>`).join('');
 let chaiNow = MENU[0].items[0];
 function pickChai(id, anim) {
   const it = ITEM[id]; chaiNow = it;
   $$('.chai__btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.chai === id));
-  const [col, desc] = CHAI[it.n];
+  const [col, desc, pk, hue] = CHAI[it.n];
   $('#cupLiq').setAttribute('fill', col); $('#cupTop').setAttribute('fill', col);
+  const img = $('#chaiImg'), frame = $('#chaiPhoto');
+  frame.style.setProperty('--glow', col.replace(')', ' / .55)'));
+  const swap = () => { img.src = PH[pk]; img.alt = it.n; img.style.setProperty('--hue', (hue || 0) + 'deg'); };
+  if (anim && MOTION && !frame.classList.contains('no-ph')) gsap.timeline().to(img, { opacity: 0, scale: 1.04, duration: .25, ease: 'power2.in', onComplete: swap }).to(img, { opacity: 1, scale: 1, duration: .7, ease: E });
+  else swap();
   $('#chaiName').textContent = it.n; $('#chaiDesc').textContent = desc; $('#chaiPrice').textContent = rs(it.p);
   $('#chaiAdd').setAttribute('aria-label', 'Add ' + it.n + ' to your table');
   if (anim && MOTION) {
@@ -1222,7 +1247,7 @@ const PAGE = {
     });
     $$('.slide').forEach(s => gsap.from($('.slide__no', s), { yPercent: 40, opacity: 0, duration: 1.2, ease: E, scrollTrigger: { trigger: s, start: 'top 75%' } }));
     $$('.gtile .pic').forEach(im => gsap.fromTo(im, { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: im.closest('.gtile'), start: 'top bottom', end: 'bottom top', scrub: true } }));
-    gsap.fromTo('.cup', { rotate: -6, y: 30 }, { rotate: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '.chai', start: 'top bottom', end: 'center center', scrub: true } });
+    gsap.fromTo('.chai__photo', { rotate: -4, y: 40 }, { rotate: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '.chai', start: 'top bottom', end: 'center center', scrub: true } });
     return () => { gsap.ticker.remove(tk); mm.revert(); };
   },
   menu() {
