@@ -316,8 +316,22 @@ html.m .rv{opacity:0;transform:translateY(40px)}
 .seg button[aria-pressed="true"]{background:var(--dusk);color:var(--white);box-shadow:0 0 24px oklch(58% .2 300 / .6)}
 .drinks{display:flex;gap:var(--s-md);overflow-x:auto;scroll-snap-type:x mandatory;padding:var(--s-xl) var(--gutter) var(--s-lg);margin-top:var(--s-lg);scrollbar-width:none;cursor:grab}
 .drinks::-webkit-scrollbar{display:none}
-.drink{flex:none;width:210px;scroll-snap-align:start;padding:var(--s-lg) var(--s-lg) var(--s-md);display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;border-radius:var(--r-lg)}
-.drink > svg{width:110px;height:150px;overflow:visible;filter:drop-shadow(0 0 22px var(--glow,transparent))}
+.drink{flex:none;width:236px;scroll-snap-align:start;padding:10px 10px var(--s-md);display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;border-radius:var(--r-lg)}
+.drink > svg{width:110px;height:150px;overflow:visible;filter:drop-shadow(0 0 22px var(--glow,transparent));margin:14px 0 6px}
+.drink__ph{position:relative;display:block;width:100%;aspect-ratio:4/5;border-radius:calc(var(--r-lg) - 8px);overflow:hidden;background:var(--ink-2);box-shadow:0 18px 40px -16px var(--glow,transparent)}
+.drink__ph .pic{position:absolute;inset:0;filter:saturate(1.12) contrast(1.05) hue-rotate(var(--hue,0deg));transition:transform 1s var(--ease)}
+.drink:hover .drink__ph .pic{transform:scale(1.07)}
+.drink__ph::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,oklch(13.5% .018 295 / .75),transparent 45%),radial-gradient(120% 80% at 50% 120%,var(--glow,transparent),transparent 60%);pointer-events:none}
+.drink__ph > svg{display:none}
+.drink__ph.no-ph{display:grid;place-items:center;background:transparent;box-shadow:none;aspect-ratio:auto;padding:14px 0 6px}
+.drink__ph.no-ph > svg{display:block;width:110px;height:150px;overflow:visible;filter:drop-shadow(0 0 22px var(--glow,transparent))}
+.drink__ph.no-ph::after{display:none}
+.drink b{margin-top:6px;padding-inline:6px}
+.drink__f{padding-inline:6px}
+.bar{overflow:hidden}
+.bar__bg{position:absolute;inset:0;z-index:-1;opacity:.22;pointer-events:none}
+.bar__bg .pic{filter:saturate(1.2) blur(2px)}
+.bar__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--ink) 0%,oklch(30% .14 300 / .55) 45%,var(--ink) 100%)}
 .drink b{font-family:var(--f-display);font-weight:800;font-size:1.25rem;text-transform:uppercase;line-height:1.05;min-height:2.1em;display:flex;align-items:center}
 .drink__f{width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:var(--s-sm);border-top:1px solid var(--line)}
 .drink__f span{font-family:var(--f-mono);color:var(--chai-hi);font-size:.9rem}
@@ -690,6 +704,7 @@ html.m .rv{opacity:0;transform:translateY(40px)}
   </section>
 
   <section class="bar" aria-labelledby="bar-h">
+    <div class="bar__bg" aria-hidden="true" data-ph-wrap><img class="pic" data-ph="barTable" alt="" loading="lazy"></div>
     <div class="wrap sec-head" style="margin-bottom:var(--s-lg)">
       <div><span class="kicker rv" style="color:oklch(78% .14 300)">After dark</span><h2 id="bar-h" class="rv">The <span class="neon">bar</span>, no buzz</h2><p class="lede rv">Thirteen mocktails, thirteen shakes, cold coffee, ice tea and ice cream.</p></div>
       <div class="seg rv" role="group" aria-label="Bar menu" id="barSeg"></div>
@@ -828,7 +843,44 @@ const PH = {
   paratha: U('1600935926387-12d9b03066f0'),   // paratha
   burger: U('1498654831517-895a5dfe4edc'),    // beef burger
   firebird: U('1651307439356-f84a5fe7e406'),  // crispy chicken burger on black
-  alfredo: U('1748012199657-3f34292cdf70')    // chicken alfredo pasta
+  alfredo: U('1748012199657-3f34292cdf70'),   // chicken alfredo pasta
+  // ---- bar ----
+  barTable: U('1654074517750-f854f7c27d62'),  // table full of mocktails
+  blueTall: U('1654074518423-750767f571a9'),  // tall blue drink, orange slices
+  pinkLemon: U('1595977514600-72cbc8376c38'), // pink drink with lemon
+  redLemon: U('1595981267035-7b04ca84a82d'),  // red drink, sliced lemon
+  redGlass: U('1608962994022-8f18c30a7c8c'),  // deep red drink
+  greenStraws: U('1634496064950-02f043806b09'), // green drink, two straws
+  orangeDrink: U('1654074518426-7ef871efccce'), // orange drink beside an orange
+  ojGlass: U('1619604394993-45c3ae65d12d'),   // glass of orange juice
+  limeIce: U('1654074519155-d95032576cdb'),   // ice + lime
+  mintTall: U('1654074517219-85e6f3f6f85d'),  // tall drink with mint
+  brownLime: U('1619604394865-437a9fd6853c'), // iced tea with lime
+  pinkDrink: U('1693857229803-f481b6dde63c'), // pink drink
+  creamGlass: U('1553787499-6f9133860278'),   // creamy shake glass
+  cookieFrappe: U('1572490122747-3968b75cc699'), // chocolate cookie frappe
+  chocoMug: U('1577805947697-89e18249d767'),  // chocolate & cream
+  strawShake: U('1579954115545-a95591f28bfc'), // strawberry shake
+  iceCookie: U('1641665271888-575e46923776'), // ice cream glass with cookie
+  dessertGlass: U('1696487774050-ba56e4b62359'), // dessert in a glass
+  milkSpoon: U('1662192511709-e75d67367638'), // milky shake with spoon
+  iceGlass: U('1619158403521-ed9795026d47'),  // ice cream in glass cup
+  iceCup: U('1619158401201-8fa932695178'),    // ice cream in a cup
+  pinkIce: U('1611928237590-087afc90c6fd'),   // pink ice cream
+  cone: U('1663721206074-02fb7b026da8'),      // ice cream cone
+  iceCherry: U('1678712803863-6cd22f6b9dba')  // ice cream with cherry
+};
+/* one photo per drink (hue shifts keep repeats from looking identical) */
+const DRINK_PH = {
+  'Pinacolada': ['creamGlass'], 'Bluecolada': ['blueTall'], 'Lemon Margarita': ['limeIce'], 'Strawberry Margarita': ['redLemon'],
+  'Peach Margarita': ['orangeDrink'], 'Lemon Fizz': ['mintTall'], 'Peachy Keen': ['ojGlass'], 'Mint Magic': ['greenStraws'],
+  'Brazilian Special Lemonade': ['limeIce', 25], 'Blue Electric': ['blueTall', 40], 'Passion Fruit Wine': ['redGlass'], 'Rosita': ['pinkLemon'], 'Lychee Cooler': ['pinkDrink'],
+  'Oreo Shake': ['cookieFrappe'], 'Nutella Shake': ['chocoMug'], 'Brownie Shake': ['iceCookie'], 'Chocolate Shake': ['dessertGlass'], 'Pistachio Shake': ['greenStraws', -15],
+  'Vanilla Shake': ['creamGlass'], 'Strawberry Shake': ['strawShake'], 'Banana Shake': ['milkSpoon'], 'Date Shake': ['iceCup'], 'Mango Shake (seasonal)': ['ojGlass'],
+  'Mango Ice Cream Shake': ['orangeDrink'], 'Kulfa Shake': ['iceGlass'], 'Peanut Butter Shake': ['iceCherry'],
+  'Chocolate Cold Coffee': ['cookieFrappe'], 'Caramel Cold Coffee': ['iceCookie'], 'Salted Caramel Cold Coffee': ['dessertGlass'], 'Spanish Cold Coffee': ['creamGlass'],
+  'Lemon Ice Tea': ['brownLime'], 'Peach Ice Tea': ['ojGlass'], 'Strawberry Ice Tea': ['redLemon'],
+  'Chocolate Ice Cream': ['iceCup'], 'Vanilla Ice Cream': ['iceGlass'], 'Strawberry Ice Cream': ['pinkIce'], 'Pista Ice Cream': ['iceCherry'], 'Mango Ice Cream': ['cone'], 'Kulfa Ice Cream': ['iceGlass', 15]
 };
 const phImg = (k, alt, cls) => `<img class="pic${cls ? ' ' + cls : ''}" src="${PH[k]}" alt="${alt || ''}" loading="lazy" decoding="async" onerror="this.closest('[data-ph-wrap]')&&this.closest('[data-ph-wrap]').classList.add('no-ph')">`;
 document.querySelectorAll('img[data-ph]').forEach(im => { im.src = PH[im.dataset.ph]; im.decoding = 'async'; im.onerror = () => { const w = im.closest('[data-ph-wrap]'); if (w) w.classList.add('no-ph'); }; });
@@ -1019,7 +1071,7 @@ function renderBar(id, anim) {
   const s = MENU.find(x => x.id === id);
   $$('#barSeg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.bar === id));
   const row = $('#drinks');
-  row.innerHTML = s.items.map(it => `<article class="drink glass" style="--glow:${tint(it.n).replace(')', ' / .45)')}">${glass(it.n, id)}<b>${it.n.replace(/ (Shake|Ice Cream|Cold Coffee|Ice Tea)$/, '')}</b><div class="drink__f"><span>${rs(it.p)}</span>${plusBtn(`data-add="${it.id}"`, 'Add ' + it.n + ' to your table')}</div></article>`).join('');
+  row.innerHTML = s.items.map(it => { const [pk, hue] = DRINK_PH[it.n] || []; return `<article class="drink glass" style="--glow:${tint(it.n).replace(')', ' / .5)')}">${pk ? `<span class="drink__ph" data-ph-wrap style="${hue ? `--hue:${hue}deg` : ''}">${phImg(pk, it.n)}${glass(it.n, id)}</span>` : glass(it.n, id)}<b>${it.n.replace(/ (Shake|Ice Cream|Cold Coffee|Ice Tea)$/, '')}</b><div class="drink__f"><span>${rs(it.p)}</span>${plusBtn(`data-add="${it.id}"`, 'Add ' + it.n + ' to your table')}</div></article>`; }).join('');
   row.scrollLeft = 0;
   if (anim && MOTION) gsap.fromTo($$('.drink', row), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: .7, ease: E, stagger: .04 });
 }
